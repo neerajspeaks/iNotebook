@@ -6,6 +6,7 @@ const Navbar = (props) => {
 
     const handleLogout = () => {
         localStorage.removeItem('token');
+        localStorage.removeItem('name');
         navigate('/login');
         props.showAlert("Logged out successfully.", "danger");
     };
@@ -29,9 +30,11 @@ const Navbar = (props) => {
                                 </li>
                             </ul>
                             {!localStorage.getItem('token') ? <form className="d-flex" role="search">
+                                
                                 <Link className="btn btn-dark" to="/login" role="button">Login</Link>
                                 <Link className="btn btn-dark" to="/signup" role="button">Sign up</Link>
-                            </form> : <button onClick = {handleLogout} className="btn btn-dark">Logout</button>}
+                            </form> : <div><button className="btn btn-dark">Welcome {localStorage.getItem('name')} </button>
+                            <button onClick = {handleLogout} className="btn btn-dark">Logout</button></div>}
                         </div>
                     </div>
                 </nav>

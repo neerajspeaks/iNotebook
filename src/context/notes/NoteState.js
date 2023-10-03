@@ -5,6 +5,8 @@ const NoteState = (props) => {
   const host = "http://localhost:5000";
   let initialnotes = [];
 
+  const [notes, setNotes] = useState(initialnotes);
+
   // 1). Get all notes
   const getNotes = async () => {
     try {
@@ -91,8 +93,6 @@ const NoteState = (props) => {
       console.log("Error occurred while deleting notes. ::: " + error);
     }
   };
-
-  const [notes, setNotes] = useState(initialnotes);
 
   return (<NoteContext.Provider value={{ notes, addNote, deleteNote, editNote, getNotes }}>
     {props.children}

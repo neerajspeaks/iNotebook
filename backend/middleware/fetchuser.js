@@ -10,7 +10,6 @@ const fetchuser = (req, res, next) => {
     if (!token) {
         res.status(401).json({ error: 'nks Please authenticate using a valid token.' });
     }
-    console.log(token);
     try {
         const data = jwt.verify(token, JWT_SECRET);
         req.user = data.user;
