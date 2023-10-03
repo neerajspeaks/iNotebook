@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const Login = () => {
+const Login = (props) => {
     const navigate = useNavigate();
     const [credentials, setCredentials] = useState({ email: "", password: "" });
     const host = "http://localhost:5000";
     
     const handleSubmit = async (event) => {
         try {
-            console.log("client1");
             event.preventDefault();
             const response = await fetch(`${host}/api/auth/login`, {
                 method: 'POST',
@@ -17,18 +16,14 @@ const Login = () => {
                 },
                 body: JSON.stringify({ email: credentials.email, password: credentials.password })
             });
-            console.log("client2");
             const json = await response.json();
-            console.log("client3");
-            console.log(json);
             if (json.success) {
-                console.log(JSON.stringify(json));
                 localStorage.setItem('token', json.authToken);
                 navigate('/');
+                props.showAlert("Logged in Successfully.", "success");
             } else {
-                alert('Invalid Credentials.');
+                props.showAlert("Invalid Credentials.", "danger");
             }
-            console.log("client4");
         } catch (error) {
             console.log("Error occuured while loggin in., Error : " + error);
         }
@@ -38,7 +33,8 @@ const Login = () => {
         setCredentials({ ...credentials, [event.target.name]: event.target.value });
     };
     return (
-        <div className="container">
+        <div className="container mt-3">
+            <h2>Login to continue to iNotebook</h2>
             <form onSubmit={handleSubmit}>
                 <div className="mb-3">
                     <label htmlFor="email" className="form-label">Email address</label>

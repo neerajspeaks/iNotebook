@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const Signup = () => {
+const Signup = (props) => {
   const navigate = useNavigate();
-  const [credentials, setCredentials] = useStaterequired minLength = { 5}({ name: "", email: "", password: "", cpassword: "" });
+  const [credentials, setCredentials] = useState({ name: "", email: "", password: "", cpassword: "" });
   const host = "http://localhost:5000";
 
   const handleSubmit = async (event) => {
     try {
-      console.log("client1");
       event.preventDefault();
       const { name, email, password } = credentials;
       const response = await fetch(`${host}/api/auth/createuser`, {
@@ -18,18 +17,14 @@ const Signup = () => {
         },
         body: JSON.stringify({ name, email, password })
       });
-      console.log("client2");
       const json = await response.json();
-      console.log("client3");
-      console.log(json);
       if (json.success) {
-        console.log(JSON.stringify(json));
         localStorage.setItem('token', json.authToken);
         navigate('/');
+        props.showAlert("Account created successfully.", "success");
       } else {
-        alert('Invalid Credentials.');
+        props.showAlert("Invalid Credentials.", "danger");
       }
-      console.log("client4");
     } catch (error) {
       console.log("Error occuured while loggin in., Error : " + error);
     }
@@ -41,6 +36,7 @@ const Signup = () => {
 
   return (
     <div className="container">
+      <h2 className = "my-2">Create an account to continue to iNotebook</h2>
       <form onSubmit={handleSubmit}>
         <div class="mb-3">
           <label forHtml="name" class="form-label">Name</label>

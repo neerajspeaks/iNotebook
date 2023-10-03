@@ -44,12 +44,12 @@ router.post('/createuser', [
                 }
             }
             const authToken = jwt.sign(data, JWT_SECRET);
-            res.status(200).json({ success, authToken });
+            return res.status(200).json({ success, authToken });
         }
     } catch (error) {
         success = false;
         console.log(error);
-        res.status(500).send(success + "Internal server error.");
+        return res.status(500).send(success + "Internal server error.");
     }
 
 });
@@ -73,12 +73,12 @@ router.post('/login', [
         let user = await User.findOne({ email: req.body.email });
         if (!user) {
             success = false;
-            res.status(400).json({ success, error: "Sorry, Please try to login with correct credentials!" });
+            return res.status(400).json({ success, error: "Sorry, Please try to login with correct credentials!" });
         }
         const comparePassword = await bcrypt.compare(password, user.password);
         if (!comparePassword) {
             success = false;
-            res.status(400).json({ success, error: "Sorry, Please try to login with correct credentials!" });
+            return res.status(400).json({ success, error: "Sorry, Please try to login with correct credentials!" });
         }
         const data = {
             user: {
@@ -86,7 +86,7 @@ router.post('/login', [
             }
         }
         const authToken = jwt.sign(data, JWT_SECRET);
-        res.status(200).json({ success, authToken });
+        return res.status(200).json({ success, authToken });
     } catch (error) {
         success = false;
         console.log(error);
@@ -101,11 +101,11 @@ router.post('/getuser', fetchuser, async (req, res) => {
         let success = true;
         const userId = req.user.id;
         const user = await User.findById(userId).select("-password");
-        res.status(200).json(success, user);
+        return res.status(200).json(success, user);
     } catch (error) {
         success = false;
         console.log(error.message);
-        res.status(500).json(success, "Internal server error");
+        return res.status(500).json(success, "Internal server error");
     }
 });
 
